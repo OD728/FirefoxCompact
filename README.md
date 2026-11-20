@@ -14,7 +14,7 @@ A compact `userChrome.css` for Firefox with tabs in the style of
 ## Features
 
 - **Darkly-style tabs, smaller.** Tabs sit in one dark strip, each tab is a pill inside it, and the selected tab is the brightest pill.
-- **Auto-hide address bar.** It folds away and opens instantly when you hover the tab bar, press `Ctrl+L` / `F6` / `Alt+D`, or open one of its menus. It hides again 0.3 s after you move away.
+- **Auto-hide address bar.** It folds away and opens after you hover the tab bar for 2 s, so moving the mouse across it doesn't trigger it. `Ctrl+L` / `F6` / `Alt+D` or opening one of its menus shows it instantly. It hides again 0.3 s after you move away.
 - **Accent hover.** Inactive tabs get a tint of your system accent colour on hover.
 - **Container tabs** colour their pill instead of showing a line.
 - **Square menus and panels** with tighter spacing.
