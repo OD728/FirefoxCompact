@@ -1,0 +1,169 @@
+/* =====================================================================
+   userChrome.css  -  compact tabs in the style of Darkly
+   (https://github.com/Bali10050/darkly-firefox, GPL-2.0)
+   ===================================================================== */
+
+/* ---------- Tab sizing knobs ---------------------------------------- */
+:root {
+  --dk-tab-height: 30px;    /* dark tab strip        (Darkly: 36px) */
+  --dk-pill-height: 24px;   /* selected-tab pill     (Darkly: 28px) */
+  --dk-strip-radius: 4px;   /* strip's outer ends    (Darkly: 10px) */
+  --dk-pill-radius: 3px;    /* selected pill         (Darkly: 6px)  */
+  --dk-tab-gap: 10px;       /* space between pills   (Darkly: 10px) */
+}
+
+/* ---------- Your existing tweaks (kept) ----------------------------- */
+:root {
+  --border-radius-circle: 0px !important;
+  --border-radius-xsmall: 0px !important;
+  --border-radius-small: 0px !important;
+  --border-radius-medium: 0px !important;
+  --border-radius-large: 0px !important;
+  --border-radius-xlarge: 0px !important;
+  --panel-border-radius: 0px !important;
+  --panel-menuitem-border-radius: 0px !important;
+}
+
+#TabsToolbar > .titlebar-buttonbox-container { display: none !important; }
+.titlebar-spacer { display: none !important; }
+#back-button, #forward-button { display: none !important; }
+#taskbar-tabs-button, #translations-button, #star-button-box { display: none !important; }
+
+/* Rahmen des geöffneten Adressfelds entfernen */
+#urlbar[open] > #urlbar-background,
+#urlbar[open] > .urlbar-background { border: none !important; }
+
+/* ---------- Darkly-style compact tabs ------------------------------- */
+
+/* Firefox's own tab metrics follow our knobs */
+#tabbrowser-tabs {
+  --tab-min-height: var(--dk-pill-height, 24px) !important;
+  --tab-block-margin: 0px !important;
+  border-inline-start-width: 0 !important;
+}
+#TabsToolbar { min-height: 0 !important; }
+#tabbrowser-arrowscrollbox { padding: 3px 0 3px 5px !important; }
+
+/* The strip: every tab gets a darkened background; neighbours merge */
+.tabbrowser-tab {
+  height: var(--dk-tab-height, 30px) !important;
+  min-height: var(--dk-tab-height, 30px) !important;
+  padding: 0 calc(var(--dk-tab-gap, 6px) / 2) !important;
+  background: #0003 !important;
+}
+.tab-stack,
+.tab-content { height: var(--dk-tab-height, 30px) !important; min-height: 0 !important; }
+.tab-content { padding-inline: 8px !important; }
+
+/* Round only the outer ends of the strip */
+.tabbrowser-tab:is([first-visible-tab], :first-of-type) {
+  border-start-start-radius: var(--dk-strip-radius, 8px) !important;
+  border-end-start-radius: var(--dk-strip-radius, 8px) !important;
+}
+.tabbrowser-tab:is([last-visible-tab], :last-of-type) {
+  border-start-end-radius: var(--dk-strip-radius, 8px) !important;
+  border-end-end-radius: var(--dk-strip-radius, 8px) !important;
+}
+
+/* The pill: centred inside the strip */
+.tab-background {
+  height: var(--dk-pill-height, 24px) !important;
+  min-height: 0 !important;
+  margin-block: calc((var(--dk-tab-height, 30px) - var(--dk-pill-height, 24px)) / 2) !important;
+  border-radius: var(--dk-pill-radius, 6px) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+/* Inactive tabs get a faint pill so the gaps between them show */
+.tabbrowser-tab:not([selected]) .tab-background {
+  background-color: color-mix(in srgb, currentColor 11%, transparent) !important;
+}
+/* Selected pill clearly brighter */
+.tab-background[selected] {
+  background-color: color-mix(in srgb, currentColor 22%, transparent) !important;
+}
+
+.tab-background[selected]::before,
+.tab-background[selected]::after { display: none !important; }
+
+/* Hover on inactive tabs: accent tint (Darkly's accentColorOnTabs) */
+.tabbrowser-tab:not([selected]):hover .tab-background {
+  background-color: color-mix(in srgb, AccentColor 20%, transparent) !important;
+}
+
+/* Smaller icon, label and close button */
+.tab-icon-image { width: 14px !important; height: 14px !important; }
+.tab-label-container { padding-left: 3px !important; }
+.tab-close-button {
+  width: 18px !important;
+  height: 18px !important;
+  padding: 3px !important;
+  margin-inline-start: 4px !important;
+  border-radius: var(--dk-pill-radius, 6px) !important;
+}
+.tab-context-line { display: none !important; }
+
+/* Container tabs tint the pill instead of a coloured line */
+.tabbrowser-tab.tabbrowser-tab[class*="identity-color-"] .tab-background {
+  background: color-mix(in srgb, var(--identity-tab-color) 35%, transparent) !important;
+}
+
+/* No gap after pinned tabs */
+#tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[first-visible-unpinned-tab] {
+  margin-inline-start: 0 !important;
+}
+
+/* Faint "+" new-tab button, solid on hover (Darkly) */
+#tabs-newtab-button,
+#new-tab-button { background: none !important; opacity: .35; }
+#tabs-newtab-button:hover,
+#new-tab-button:hover { opacity: .9; }
+#tabs-newtab-button > .toolbarbutton-icon,
+#new-tab-button > .toolbarbutton-icon { background: none !important; }
+
+/* ---------- Auto-hide address bar ----------------------------------- */
+/* Folded away until you hover the tab bar, press Ctrl+L / F6,
+   or one of the nav-bar's menus/panels is open. */
+#nav-bar {
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0;
+  transition: max-height .15s ease .3s, opacity .15s ease .3s !important; /* .3s grace before hiding */
+}
+#navigator-toolbox:hover #nav-bar,
+#navigator-toolbox:focus-within #nav-bar,
+#nav-bar:has([open], #urlbar[breakout-extend]) {
+  max-height: 48px !important;
+  overflow: visible !important;   /* let the URL dropdown spill out */
+  opacity: 1;
+  transition-delay: 0s !important; /* show instantly */
+}
+
+/* ---------- Panels, menus, tooltips (kept) -------------------------- */
+panel, menupopup { --panel-border-radius: 0px !important; border-radius: 0px !important; }
+
+menu, menuitem, .menuitem-iconic, .bookmark-item, panelview .toolbarbutton-1 {
+  border-radius: 0px !important;
+  --arrowpanel-menuitem-border-radius: 0px !important;
+}
+
+tooltip { border-radius: 0px !important; }
+
+panel menuitem, panel .bookmark-item, menupopup menuitem, menupopup menu {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  min-height: 24px !important;
+}
+
+panel menuitem, panel .bookmark-item {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+panelmultiview, .panel-subview-body, panel .panel-arrowcontent {
+  padding: 4px !important;
+  min-width: unset !important;
+}
