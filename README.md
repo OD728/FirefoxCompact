@@ -20,7 +20,16 @@ A compact `userChrome.css` for Firefox with tabs in the style of
 - **Square menus and panels** with tighter spacing.
 - **Less clutter:** back/forward buttons, the bookmark star, translations and taskbar-tab buttons and the window buttons in the tab bar are hidden.
 
-The window buttons in the screenshots are not part of this CSS.
+### Window buttons
+
+This CSS hides Firefox's own minimize / maximize / close buttons.
+The coloured dots in the screenshots replace them. They come from three Firefox add-ons, which put a button in the toolbar:
+
+- **OS style Close Window Button**
+- **OS style Maximize Window Button**
+- **OS style Minimize Window Button**
+
+Install them from [addons.mozilla.org](https://addons.mozilla.org/firefox/search/?q=OS%20style%20Window%20Button), then right-click the tab bar → **Customize Toolbar…** and drag the three buttons to the end of the tab bar.
 
 ## Installation
 
