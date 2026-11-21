@@ -1,6 +1,6 @@
 # Firefox Compact
 
-A compact `userChrome.css` for Firefox with tabs in the style of
+**Firefox userChrome.css:** a compact `userChrome.css` for Firefox with tabs in the style of
 [Darkly](https://github.com/Bali10050/darkly-firefox) and an address bar that hides until you need it.
 
 **Address bar hidden**
